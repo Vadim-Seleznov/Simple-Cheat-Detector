@@ -15,7 +15,7 @@ def usage_general() -> None:
     sys.exit(1)
 
 def usage_branch() -> None:
-    print(f"{RED}ERROR{RESET}: {GREY}usage: vvcommit.py request branch-name commit_message{RESET}")
+    print(f"{RED}ERROR{RESET}: {GREY}usage: vvcommit.py branch branch-name commit_message{RESET}")
     sys.exit(1)
 
 def commit_curr(commit_message: str) -> None:
