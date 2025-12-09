@@ -9,7 +9,7 @@ possible_names = [
     "nursultan", "celestial", "catlavan", "baritone", "wexside", "topka", "xorek",
     "automyst",
     
-    "xray", "autoclicker", "hitbox", "hitboxes", "autobuy", "killaur", "aimassist",
+    "xray", "autoclicker", "hitbox", "hitboxes", "autobuy", "killaura", "aimassist",
     "triggerbot", "speedhack", "flyhack", "reach", "nofall", "fastplace",
     
     "hack", "bypass", "utility", "modmenu", "injector", "cheatengine"
