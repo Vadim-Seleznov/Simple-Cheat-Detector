@@ -11,8 +11,7 @@
 ---
 
 ## VVCOMMIT
-VVCOMMIT - small script (vvcommit.py) to faster commit and push changes into main branch
-usage: python vvcommit.py "commit message here"
+VVCOMMIT - small script (vvcommit.py) https://github.com/Vadim-Seleznov/vvcommit
 
 ## ⚠️ ВАЖНО
 
