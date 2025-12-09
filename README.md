@@ -10,6 +10,10 @@
 
 ---
 
+## VVCOMMIT
+VVCOMMIT - small script (vvcommit.py) to faster commit and push changes into main branch
+usage: python vvcommit.py "commit message here"
+
 ## ⚠️ ВАЖНО
 
 Эта программа ищет читы в основном по именам.  
