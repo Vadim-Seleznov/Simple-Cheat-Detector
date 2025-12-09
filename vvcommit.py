@@ -45,6 +45,7 @@ def usage_general() -> None:
     print(f"{GREEN}main - git commit and push into main{RESET}")
     print(f"{GREEN}branch - git commit and push into specific branch{RESET}")
     print(f"{GREEN}help - for getting help with tool{RESET}")
+    print(f"{GREEN}pull - git pull or git pull origin \"branch-name\" if you provide an argument{RESET}")
     print(f"{GREEN}update - for getting newest version of tool from github! (--no-backup for not creating .bak file){RESET}")
     sys.exit(1)
 
@@ -54,6 +55,7 @@ def help() -> None:
     print(f"{GREEN}curr - git commit and push into current branch{RESET}")
     print(f"{GREEN}main - git commit and push into main{RESET}")
     print(f"{GREEN}branch - git commit and push into specific branch{RESET}")
+    print(f"{GREEN}pull - git pull or git pull origin \"branch-name\" if you provide an argument (python ./vvcommit.py pull (optional branch name)){RESET}")
     print(f"{GREEN}update - for getting newest version of tool from github! (--no-backup for not creating .bak file){RESET}")
     print(f"{GREEN}If you use branch request you should give extra argument with branch name{RESET}")
     print(f"{GREEN}EXAMPLE:{RESET} python ./vvcommit.py branch \"main\" \"small fix\"")
@@ -62,6 +64,11 @@ def help() -> None:
 
 def usage_branch() -> None:
     print(f"{RED}ERROR{RESET}: {GREY}usage: python ./vvcommit.py branch branch-name commit_message{RESET}")
+    sys.exit(1)
+
+
+def usage_pull() -> None:
+    print(f"{RED}ERROR{RESET}: {GREY}usage: python ./vvcommit.py pull branch-name{RESET}")
     sys.exit(1)
 
 def commit_curr(commit_message: str) -> None:
@@ -99,6 +106,14 @@ def commit_branch(branch: str, commit_message) -> None:
 
     print(f'{GREEN}Successful commit: {commit_message} into branch: {branch}{RESET}')
 
+def pull(branch: str = "none") -> None:
+    if branch == "none":
+        subprocess.run(["git", "pull"])
+    else:
+        subprocess.run(["git", "pull", "origin", branch])
+
+    sys.exit(0)
+
 if __name__ == "__main__":
     print(f"{GREEN}Welcome from vvcommit!{RESET}")
     
@@ -118,6 +133,8 @@ if __name__ == "__main__":
             help()
     elif request == "update":
         update("backup")
+    elif request == "pull":
+        pull()
 
     if len(sys.argv) < 3:
         usage_general()
@@ -131,6 +148,9 @@ if __name__ == "__main__":
         branch = sys.argv[2]
         commit_message = sys.argv[3]
         commit_branch(branch, commit_message)
+    if request == "pull":
+        branch = sys.argv[2]
+        pull(branch)
     elif request == "curr":
         commit_curr(commit_message)
     elif request == "main":
