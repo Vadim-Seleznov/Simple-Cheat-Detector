@@ -33,7 +33,7 @@ def update(flag: str) -> None:
         print(f"Update failed: {e}")
         if os.path.exists(backup_path):
             shutil.copy2(backup_path, script_path)
-            print("{GREEN}Restored backup version.{RESET}")
+            print(f"{GREEN}Restored backup version.{RESET}")
         sys.exit(1)
 
     sys.exit(0)
@@ -100,7 +100,7 @@ def commit_branch(branch: str, commit_message) -> None:
     print(f'{GREEN}Successful commit: {commit_message} into branch: {branch}{RESET}')
 
 if __name__ == "__main__":
-    print("Welcome from vvcommit!")
+    print(f"{GREEN}Welcome from vvcommit!{RESET}")
     
     if len(sys.argv) < 2:
         usage_general()
