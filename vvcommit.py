@@ -21,8 +21,10 @@ def usage_branch() -> None:
 def commit_curr(commit_message: str) -> None:
     subprocess.run(["git", "add", "."])
 
-    subprocess.run(["git", "commit", "-m", commit_message])
-
+    result = subprocess.run(["git", "commit", "-m", commit_message])
+    if result.returncode != 0:
+        print(f"{RED}Commit failed!{RESET}")
+        sys.exit(1)
     subprocess.run(["git", "push"])
 
     print(f'{GREEN}Successfull commit{RESET}: {commit_message}')
@@ -30,7 +32,10 @@ def commit_curr(commit_message: str) -> None:
 def commit_main(commit_message: str) -> None:
     subprocess.run(["git", "add", "."])
 
-    subprocess.run(["git", "commit", "-m", commit_message])
+    result = subprocess.run(["git", "commit", "-m", commit_message])
+    if result.returncode != 0:
+        print(f"{RED}Commit failed!{RESET}")
+        sys.exit(1)
 
     subprocess.run(["git", "push", "origin", "main"])
 
@@ -39,7 +44,10 @@ def commit_main(commit_message: str) -> None:
 def commit_branch(branch: str, commit_message) -> None:
     subprocess.run(["git", "add", "."])
 
-    subprocess.run(["git", "commit", "-m", commit_message])
+    result = subprocess.run(["git", "commit", "-m", commit_message])
+    if result.returncode != 0:
+        print(f"{RED}Commit failed!{RESET}")
+        sys.exit(1)
 
     subprocess.run(["git", "push", "origin", branch])
 
