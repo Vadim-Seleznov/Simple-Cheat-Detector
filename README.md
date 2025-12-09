@@ -1,4 +1,5 @@
 # Всем ку!  
+# TODO: Make program portable for Linux (now its only working for Tlauncher on Windows)
 *(Sorry but for now I made only russian version of readme)*  
 
 Это простенький Python-проект, сделанный лично мною на досуге за ~2 часа.  

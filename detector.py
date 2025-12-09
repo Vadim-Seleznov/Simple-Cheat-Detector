@@ -1,3 +1,4 @@
+#!/usr/bin/env/python
 import os
 import zipfile
 
@@ -163,3 +164,4 @@ if __name__ == "__main__":
     deep_search_in_resourcepacks()
     print_logs()
     input(f"\n{GREY}Тапните Enter чтобы закрыть{RESET}\n")
+
