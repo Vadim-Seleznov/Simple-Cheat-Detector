@@ -1,5 +1,8 @@
 import subprocess
 import sys
+import os
+import shutil
+import urllib.request
 
 RED = "\033[31m"
 GREEN = "\033[32m"
@@ -8,14 +11,32 @@ RESET = "\033[0m"
 
 def update() -> None:
     url = "https://raw.githubusercontent.com/Vadim-Seleznov/vvcommit/main/vvcommit.py"
-    response = requests.get(url)
-    if response.status_code == 200:
-        script_path = os.path.realpath(sys.argv[0])
+    script_path = os.path.realpath(sys.argv[0])
+    backup_path = script_path + ".bak"
+
+    print("Starting update...")
+
+    try:
+        response = urllib.request.urlopen(url)
+        data = response.read().decode("utf-8")
+
+        shutil.copy2(script_path, backup_path)
+        print(f"Backup created at: {backup_path}")
+
         with open(script_path, "w", encoding="utf-8") as f:
-            f.write(response.text)
-        print("Updated successfully! Restart the script.")
-    else:
-        print("Failed to download update.") 
+            f.write(data)
+
+        print("Update completed successfully!")
+        print("Restart the script to use the new version.")
+
+    except Exception as e:
+        print(f"Update failed: {e}")
+        if os.path.exists(backup_path):
+            shutil.copy2(backup_path, script_path)
+            print("Restored backup version.")
+        sys.exit(1)
+
+    sys.exit(0)
 
 def usage_general() -> None:
     print(f"{RED}ERROR{RESET}: {GREY}usage: python ./vvcommit.py request commit_message{RESET}")
