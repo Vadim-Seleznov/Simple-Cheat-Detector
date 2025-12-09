@@ -163,5 +163,5 @@ if __name__ == "__main__":
     print(f'{GREY}Deep search in resource packs{RESET}') 
     deep_search_in_resourcepacks()
     print_logs()
-    input(f"\n{GREY}Тапните Enter чтобы закрыть{RESET}\n")
+    input(f"\n{GREY}Click any button to close{RESET}\n")
 
