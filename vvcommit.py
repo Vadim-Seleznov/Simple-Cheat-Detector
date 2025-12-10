@@ -34,7 +34,7 @@ def update(flag: str) -> None:
         print(f"{GREEN}Update completed successfully!{RESET}")
 
     except Exception as e:
-        print(f"Update failed: {e}")
+        print(f"{RED}ERROR Update failed {RESET}: {e}")
         if os.path.exists(backup_path):
             shutil.copy2(backup_path, script_path)
             print(f"{GREEN}Restored backup version.{RESET}")
@@ -111,6 +111,7 @@ def pull(branch: str = "none") -> None:
 # to use it just go to github website create new repo
 # then use init command with yours username + repo-name
 def init(login: str, repo: str) -> None:
+    subprocess.run(["git", "init", "."])
     subprocess.run(["git", "add", "."])
     result = subprocess.run(["git", "commit", "-m", "Initial commit"])
     if result.returncode != 0:
