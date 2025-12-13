@@ -25,23 +25,30 @@ HOME_DIR = os.path.expanduser("~")
 DESKTOP_DIR = os.path.join(HOME_DIR, "Desktop")
 DOWNLOADS_DIR = os.path.join(HOME_DIR, "Downloads")
 
+LOGS_COUNT = 30
 
 def print_detected(name: str, path: str) -> None: 
     print(f'{RED}CHEAT DETECTED:{RESET} {name} ({path})')
 
-
-def print_logs() -> None:
+def print_logs(os_name: str) -> None:
     print(f"{GREEN}--------------------------------LOGS---------------------------------{RESET}")
     print(f"{GREEN}LATEST LOG: {RESET}")
-    path = os.path.join(HOME_DIR, "AppData", "Roaming", ".minecraft", "logs")
+    if os_name == "windows":
+        path = os.path.join(HOME_DIR, "AppData", "Roaming", ".minecraft", "logs")
+    elif os_name == "linux":
+        path = os.path.join("/", "root", ".minecraft", "logs")
+
     for log in os.listdir(path):
         if log == "latest.log":
                 with open(os.path.join(path, log)) as f:
-                    for i in range(10):
+                    for i in range(LOGS_COUNT):
                         print(f.readline())
 
-def deep_search_in_mods() -> None:
-    path = os.path.join(HOME_DIR, "AppData", "Roaming", ".minecraft", "mods")
+def deep_search_in_mods(os_name: str) -> None:
+    if os_name == "windows":
+        path = os.path.join(HOME_DIR, "AppData", "Roaming", ".minecraft", "mods")
+    elif os_name == "linux":
+        path = os.path.join("/", "/root", ".minecraft", "mods")
 
     SUSPICIOUS_KEYWORDS = [
         "hitbox", "hitboxes", "reach", "killaura", "aimbot", "xray", "wallhack", "autoclicker",
@@ -73,11 +80,14 @@ def deep_search_in_mods() -> None:
         for mod, reason in suspicious_mods:
             print(f"{mod} — {reason}")
     else:
-        print("No suspect mods.")
+        print(f"{GREEN}No suspect mods.{RESET}")
 
 
-def deep_search_in_resourcepacks() -> None:
-    path = os.path.join(HOME_DIR, "AppData", "Roaming", ".minecraft", "resourcepacks")
+def deep_search_in_resourcepacks(os_name: str) -> None:
+    if os_name == "windows":
+        path = os.path.join(HOME_DIR, "AppData", "Roaming", ".minecraft", "resourcepacks")
+    elif os_name == "linux":
+        path = os.path.join("/", "root", ".minecraft", "resourcepacks")
 
     if not os.path.exists(path):
         print(f"{GREY}There is no resourcepacks path{RESET}")
@@ -123,14 +133,26 @@ def name_matches(name: str) -> bool:
     return any(keyword in lower_name for keyword in possible_names)
 
 def check_path(path: str) -> None:
+    counter: int = 0
+
     try:
         for item in os.listdir(path):
             if name_matches(item):
                 print_detected(item, path)
+                counter += 1
     except FileNotFoundError:
         print(f"{GREY}Path not found: {path}{RESET}")
+        counter = -1
     except PermissionError:
         print(f"{GREY}No access to: {path}{RESET}")
+        counter = -1
+
+    if counter == 0:
+        print(f'{GREEN}PATH: {path} is clear{RESET}')
+    elif counter > 0:
+        print(f'{GREY}summary{RESET}: {RED}{counter}{RESET} suspect files in {GREY}\"{path}\"{RESET}')
+    else:
+        return
 
 def check_disk(disk_letter: str) -> None:
     try:
@@ -150,18 +172,52 @@ def appdata_check() -> None:
     check_path(os.path.join(roaming_path, ".minecraft", "resourcepacks"))
     check_path(os.path.join(roaming_path, ".minecraft", "versions"))
 
-if __name__ == "__main__":
-    print(f'{GREEN}Program has started{RESET}')
+def windows_logic() -> None:
+    print(f'{GREY}USER IS RUNNING ON WINDOWS{RESET}')
     check_disk("C")
     check_disk("D")
     check_disk("E")
     appdata_check()
     check_path(DESKTOP_DIR)
     check_path(DOWNLOADS_DIR)
-    print(f'{GREY}Deep search in mods: {RESET}')
-    deep_search_in_mods()
-    print(f'{GREY}Deep search in resource packs{RESET}') 
-    deep_search_in_resourcepacks()
-    print_logs()
+    print(f'{GREY}Deep search in mods (this is probably not cheats): {RESET}')
+    deep_search_in_mods("windows")
+    print(f'{GREY}Deep search in resource packs (this is probably not cheats){RESET}') 
+    deep_search_in_resourcepacks("windows")
+    print_logs("windows")
     input(f"\n{GREY}Click any button to close{RESET}\n")
+
+def linux_logic() -> None:
+    #GREETING
+    print(f'{GREY}USER IS RUNNING ON LINUX OR MACOS{RESET}')
+    
+    # ROOT "/"
+    print(f'{GREY}CHECK IN ROOT FOLDER...{RESET}')
+    check_path("/")
+    check_path("/root")
+
+    # .minecraft
+    check_path(os.path.join("/", "root", ".minecraft"))
+    check_path(os.path.join("/", "root", ".minecraft", "config"))
+    check_path(os.path.join("/", "root", ".minecraft", "mods"))
+    check_path(os.path.join("/", "root", ".minecraft", "resourcepacks"))
+    check_path(os.path.join("/", "root", ".minecraft", "versions"))
+
+    print(f'{GREY}Deep search in mods (this is probably not cheats): {RESET}')
+    deep_search_in_mods("linux")
+
+
+    print(f'{GREY}Deep search in resource packs (this is probably not cheats){RESET}') 
+    deep_search_in_resourcepacks("linux")
+    
+    print_logs("linux")
+
+    input(f"\n{GREY}Click any button to close{RESET}\n")
+
+if __name__ == "__main__":
+    print(f'{GREEN}Program has started{RESET}')
+    if os.name == "nt":
+        windows_logic()
+    elif os.name == "posix":
+        linux_logic()
 

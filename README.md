@@ -1,5 +1,4 @@
 # Всем ку!  
-# TODO: Make program portable for Linux (now its only working for Tlauncher on Windows or some premium cheat clients)
 *(Sorry but for now I made only russian version of readme)*  
 
 Это простенький Python-проект, сделанный лично мною на досуге за ~2 часа.  
