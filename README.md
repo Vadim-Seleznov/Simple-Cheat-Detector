@@ -1,79 +1,64 @@
-# Всем ку!  
-*(Sorry but for now I made only russian version of readme)*  
+# Hello everyone!    
 
-Это простенький Python-проект, сделанный лично мною на досуге за ~2 часа.  
-Он детектит все базовые читы, вплоть до Xray.  
+This is a simple Python project I personally made in my free time in about ~2 hours.  
+It detects all basic cheats, including Xray.  
 
-> 💡 P.S. Изначально я хотел как подозрительные выводить все ресурспаки, которые как-то влияют на альфа-канал `.png`-картинок, но решил это убрать, так как это делают почти все ресурспаки.  
-> Xray — это не тот чит, которого в современном мире, особенно на серверах вроде RW и HW, стоит бояться.  
+> 💡 P.S. Initially, I wanted to mark all resource packs that somehow affect the alpha channel of `.png` images as suspicious, but I decided to remove this since almost all resource packs do this.  
+> Xray is not the kind of cheat to really fear in the modern world, especially on servers like RW and HW.  
 
 ---
 
 ## VVCOMMIT
 VVCOMMIT - small script (vvcommit.py) https://github.com/Vadim-Seleznov/vvcommit
 
-## ⚠️ ВАЖНО
+## ⚠️ IMPORTANT
 
-Эта программа ищет читы в основном по именам.  
+This program mainly detects cheats **by names**.  
 
-Кто-то может спросить: "А что мешает переименовать папку с читом?"  
-На самом деле всё не так просто 🙂  
+Some might ask: "What stops someone from renaming the cheat folder?"  
+Actually, it’s not that simple 🙂  
 
-Если, например, переименовать папку `Nursultan` на диске C, то сам чит не сможет её больше найти и:  
-- либо не запустится,  
-- либо крашнется.  
+For example, if you rename the folder `Nursultan` on drive C, the cheat itself will no longer be able to find it and:  
+- either it won’t start,  
+- or it will crash.  
 
-(*Я давно не играю в Minecraft и могу ошибаться. Поправить меня можно в Discord: `twxxxx`.*)  
+(*I haven’t played Minecraft in a long time, so I might be wrong. You can correct me on Discord: `vadeicy`.*)  
 
 ---
 
-## 🔍 Что делает программа?
+## 🔍 What does the program do?
 
-- Лопатит компьютер в поисках читов (по именам и иногда — по названиям классов внутри модов).  
-- Проверяет:  
-  - рабочий стол,  
-  - загрузки,  
-  - все диски,  
-  - домашнюю директорию,  
+- Scans the computer for cheats (by folder/file names and sometimes by class names inside mods).  
+- Checks:  
+  - Desktop,  
+  - Downloads,  
+  - All drives,  
+  - Home directory,  
   - `AppData/Roaming`,  
-  - сам Minecraft.  
-- Выводит в конце логи из `.minecraft/logs` (это помогает понять, когда игрок в последний раз заходил в игру, и не перезаходил ли он во время проверки).  
+  - Minecraft itself.  
+- At the end, it outputs logs from `.minecraft/logs` (helpful to see when the player last played and if they rejoined during the scan).  
 
-Все подозрительные имена вы можете найти в начале кода в переменной `possible_names` а иногда внутри функций (туда же можно добавлять свои).  
+All suspicious names can be found at the start of the code in the `possible_names` variable and sometimes inside functions (you can also add your own there).  
 
 ---
 
-## 🚀 Как использовать?
+## 🚀 How to use?
 
-НА ДАННЫЙ МОМЕНТ .exe ФАЙЛ ИСПОЛЬЗУЕТ СТАРУЮ ВЕРСИЮ ПРОГРАММЫ:
-РЕКОМЕНДУЕТСЯ РУЧНОЙ БИЛД ПРОГРАММЫ ( ЕСЛИ ВЫ НА ЛИНУКС ВСЕ ХОРОШО просто сделайте: chmod +x detector затем ./detector )
-1. В папке `dist` проекта лежит готовый `.exe` файл.
-   - Вы можете скачать его себе.  
-   - Или скинуть "читеру".  
-   - Если не доверяете `.exe`, соберите проект сами.  
+**CURRENTLY, THE .EXE FILE USES AN OLD VERSION OF THE PROGRAM:**  
+IT IS RECOMMENDED TO BUILD THE PROGRAM MANUALLY (IF YOU ARE ON LINUX, it’s simple: `chmod +x detector` then `./detector`)  
 
-2. Код программы в одном файле, поэтому даже Git не обязателен.  
-   - Просто сделайте `Ctrl + C` → `Ctrl + V` в файл (`main.py` или `detector.py`).  
+1. In the project’s `dist` folder, there is a ready-made `.exe` file.  
+   - You can download it yourself.  
+   - Or give it to the "cheater".  
+   - If you don’t trust the `.exe`, build the project yourself.  
 
-3. Установите Python и PyInstaller:  
+2. The program code is in a single file, so Git is not required.  
+   - Just copy and paste into a file (`main.py` or `detector.py`).  
+
+3. Install Python and PyInstaller:  
    ```bash
    pip install pyinstaller
 
-Соберите проект:
-pyinstaller --onefile {ваше_название}
-В папке появится dist, а внутри — ваш .exe.
+4. Build the project:
 
-Теперь можно смело пользоваться 🚀
-
-## 🤝 Участие
-
-Код бесплатный: добавляйте новые читы и фичи.
-
-Если у вас есть крутые идеи — делайте Pull Request.
-
-Вдохновился я у ютубера Zako, думаю, он заслуживает упоминания.
-
-## 🎯 Заключение
-
-Всем спасибо, кто прочитал полностью!
-Желаю удачной охоты на читеров! 🏹👾
+pyinstaller --onefile {your_filename}
