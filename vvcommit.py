@@ -49,6 +49,8 @@ def help() -> None:
     print(f"{GREEN}main - git commit and push into main{RESET}")
     print(f"{GREEN}branch - git commit and push into specific branch{RESET}")
     print(f"{GREEN}pull - git pull or git pull origin \"branch-name\" if you provide an argument (python ./vvcommit.py pull (optional branch name)){RESET}")
+    print(f"{GREEN}ignore - adding program to .gitignore to like \"not sharing it or something\"{RESET}")
+    print(f"{GREEN}ignore --restore - to restore ignore request and add vvcommit to github again{RESET}")
     print(f"{GREEN}init - to init github repo in current directory from scratch with github-login and repo-name{RESET}")
     print(f"{GREEN}push-ex - pushing stuff into existing github repo using github-login and repo-name{RESET}")
     print(f"{GREEN}update - for getting newest version of tool from github! (--no-backup for not creating .bak file){RESET}")
@@ -131,6 +133,61 @@ def push_ex(login: str, repo: str) -> None:
 
     sys,exit(0)
 
+
+# ADD PROGRAM AND ALL OF IT FILES INTO .gitignore AND MAKE THEM NOT VISABLE
+def ignore() -> None:
+    print(f"{GREY}Ignoring myself :< {RESET}")
+
+    try:
+        path = './.gitignore'
+        with open(path, "a") as f:
+            f.write("vvcommit.py\n")
+            f.write("vvcommit.py.bak\n")
+        
+        subprocess.run(["git", "rm", "--cached", "vvcommit.py", "vvcommit.py.bak"])
+
+        print(f"{GREEN}Added to program into .gitignore succefully!{RESET}")
+
+    except Exception as e:
+        print(f"{RED}ERROR:{RESET} {e}")
+        sys.exit(1)
+
+    sys.exit(0)
+
+# BACKUP FUNCTION FOR ignore()
+def restore_ignore() -> None:
+    try:
+        print(f"{GREY}Restore script started successfully{RESET}")
+        path = "./.gitignore"
+        print(f"{GREY}Trying remove all vvcommit stuff from .gitignore{RESET}")
+        with open(path, "r") as f:
+            print(f"{GREY}Reading from .gitignore{RESET}")
+            lines = f.readlines()
+            with open(path, "w") as new_file:
+                for line in lines:
+                    if not line.startswith("vvcommit"):
+                        new_file.write(line)
+
+        print(f"{GREEN}Successfully removed!{RESET}")
+       
+        script_path = os.path.realpath(sys.argv[0])
+        backup_path = script_path + ".bak"
+        
+        print(f"{GREY}Trying to add files...{RESET}")
+        if not backup_path:
+            subprocess.run(["git", "add", "-f", "vvcommit.py"])
+        else:
+            subprocess.run(["git", "add", "-f", "vvcommit.py", "vvcommit.py.bak"])
+        
+
+        print(f"{GREEN}Successful added! Now just commit + push...{RESET}")
+        subprocess.run(["git", "commit", "-m", "Restored vvcommit"])
+        subprocess.run(["git", "push"])
+        sys.exit(0)
+    except Exception as e:
+        print(f"{RED}ERROR:{RESET} {e}")
+        sys.exit(1)
+
 # MAIN FUNCTION
 def main() -> None:
     print(f"{GREEN}Welcome from vvcommit!{RESET}")
@@ -155,6 +212,17 @@ def main() -> None:
         user_login = sys.argv[2]
         repo = sys.argv[3]
         push_ex(user_login, repo)
+
+    if request == "ignore":
+        if len(sys.argv) == 2:
+            ignore()
+        elif len(sys.argv) == 3:
+            if sys.argv[2] == "--restore":
+                restore_ignore()
+            else:
+                usage("ignore --restore")
+        else:
+            usage("ignore --restore")
 
     if request == "help":
         help()
