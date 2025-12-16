@@ -12,7 +12,7 @@ RESET = "\033[0m"
 
 # UPDATE FUNCTION
 # With this function you can get newest version of script from github with only 1 command
-# also it has --no-backup flag if you dont want to save backup for older version
+# also it has --no-backup flag if you dont want to save backup with older version
 def update(flag: str) -> None:
     url = "https://raw.githubusercontent.com/Vadim-Seleznov/vvcommit/main/vvcommit.py"
     script_path = os.path.realpath(sys.argv[0])
@@ -46,7 +46,6 @@ def help() -> None:
     print(f"{GREY}--------------------VV HELP----------{RESET}")
     print(f"{RED}Request options:{RESET}")
     print(f"{GREEN}curr - git commit and push into current branch{RESET}")
-    print(f"{GREEN}main - git commit and push into main{RESET}")
     print(f"{GREEN}branch - git commit and push into specific branch{RESET}")
     print(f"{GREEN}pull - git pull or git pull origin \"branch-name\" if you provide an argument (python ./vvcommit.py pull (optional branch name)){RESET}")
     print(f"{GREEN}ignore - adding program to .gitignore to like \"not sharing it or something\"{RESET}")
@@ -74,18 +73,7 @@ def commit_curr(commit_message: str) -> None:
 
     print(f'{GREEN}Successful commit{RESET}: {commit_message}')
 
-# ADD + COMMIT + PUSH STUFF INTO MAIN BRANCH
-def commit_main(commit_message: str) -> None:
-    subprocess.run(["git", "add", "."])
-
-    result = subprocess.run(["git", "commit", "-m", commit_message])
-    if result.returncode != 0:
-        print(f"{RED}Commit failed!{RESET}")
-        sys.exit(1)
-
-    subprocess.run(["git", "push", "origin", "main"])
-
-    print(f'{GREEN}Successful commit: {commit_message}{RESET}')
+    sys.exit(0)
 
 # ADD + COMMIT + PUSH STUFF INTO SPECIFIC BRANCH
 def commit_branch(branch: str, commit_message) -> None:
@@ -100,6 +88,8 @@ def commit_branch(branch: str, commit_message) -> None:
 
     print(f'{GREEN}Successful commit: {commit_message} into branch: {branch}{RESET}')
 
+    sys.exit(0)
+
 # PULL STUFF FROM CURRENT OR SPECIFIC BRANCH
 def pull(branch: str = "none") -> None:
     if branch == "none":
@@ -109,7 +99,7 @@ def pull(branch: str = "none") -> None:
 
     sys.exit(0)
 
-# INIT GIT REPO FROM ABSOLUTELY FROM SCRATCH
+# INIT GIT REPO ABSOLUTELY FROM SCRATCH
 # to use it just go to github website create new repo
 # then use init command with yours username + repo-name
 def init(login: str, repo: str) -> None:
@@ -133,18 +123,22 @@ def push_ex(login: str, repo: str) -> None:
 
     sys,exit(0)
 
-
 # ADD PROGRAM AND ALL OF IT FILES INTO .gitignore AND MAKE THEM NOT VISABLE
 def ignore() -> None:
     print(f"{GREY}Ignoring myself :< {RESET}")
 
     try:
         path = './.gitignore'
+        exists_bak_path = True if os.path.isfile(os.path.join("./", "vvcommit.py.bak")) else False
         with open(path, "a") as f:
             f.write("vvcommit.py\n")
-            f.write("vvcommit.py.bak\n")
+            if exists_bak_path:
+                f.write("vvcommit.py.bak\n")
         
-        subprocess.run(["git", "rm", "--cached", "vvcommit.py", "vvcommit.py.bak"])
+        if exists_bak_path:
+            subprocess.run(["git", "rm", "--cached", "vvcommit.py", "vvcommit.py.bak"])
+
+        subprocess.run(["git", "rm", "--cached", "vvcommit.py"])
 
         print(f"{GREEN}Added to program into .gitignore succefully!{RESET}")
 
@@ -174,11 +168,15 @@ def restore_ignore() -> None:
         backup_path = script_path + ".bak"
         
         print(f"{GREY}Trying to add files...{RESET}")
-        if not backup_path:
+
+
+        exists_backup_path = True if os.path.isfile(backup_path) else False
+        if not exists_backup_path:
             subprocess.run(["git", "add", "-f", "vvcommit.py"])
         else:
             subprocess.run(["git", "add", "-f", "vvcommit.py", "vvcommit.py.bak"])
         
+        subprocess.run(["git", "add", ".gitignore"])
 
         print(f"{GREEN}Successful added! Now just commit + push...{RESET}")
         subprocess.run(["git", "commit", "-m", "Restored vvcommit"])
@@ -226,22 +224,20 @@ def main() -> None:
 
     if request == "help":
         help()
-    elif request == "update" and len(sys.argv) > 2:
-        if sys.argv[2] == "--no-backup":
+
+    if request == "update":
+        if len(sys.argv) > 2 and sys.argv[2] == "--no-backup":
             update("no-backup")
         else:
             print(f"{RED}ERROR:{RESET} no such flag: {sys.argv[2]}")
             help()
-    elif request == "update":
-        update("backup")
-    elif request == "pull":
-        pull()
 
-    if len(sys.argv) < 3:
-        help()
+        if len(sys.argv) == 2:
+            update("backup")
+
+    if request == "pull":
+        pull()
         
-    commit_message = sys.argv[2]
-    
     if request == "branch":
         if len(sys.argv) < 4:
             usage("branch branch-name commit-message")
@@ -249,16 +245,20 @@ def main() -> None:
         branch = sys.argv[2]
         commit_message = sys.argv[3]
         commit_branch(branch, commit_message)
+
+    if len(sys.argv) < 3: usage("request commit-message")
+
+    commit_message = sys.argv[2]
+
     if request == "pull":
         branch = sys.argv[2]
         pull(branch)
-    elif request == "curr":
+    
+    if request == "curr":
         commit_curr(commit_message)
-    elif request == "main":
-        commit_main(commit_message)
-    else:
-        print(f"{RED}ERROR:{RESET} no such request!")
-        help()
+
+    print(f"{RED}ERROR:{RESET} no such request!")
+    help()
 
 if __name__ == "__main__":
     main()
