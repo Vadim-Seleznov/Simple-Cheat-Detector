@@ -9,7 +9,7 @@ It detects all basic cheats, including Xray.
 ---
 
 ## VVCOMMIT
-VVCOMMIT - small script (vvcommit.py) https://github.com/Vadim-Seleznov/vvcommit
+VVCOMMIT - project powered by vvcommit https://github.com/Vadim-Seleznov/vvcommit
 
 ## ⚠️ IMPORTANT
 
@@ -62,3 +62,6 @@ IT IS RECOMMENDED TO BUILD THE PROGRAM MANUALLY (IF YOU ARE ON LINUX, it’s sim
 4. Build the project:
 
 pyinstaller --onefile {your_filename}
+
+## LICENSE
+MIT
