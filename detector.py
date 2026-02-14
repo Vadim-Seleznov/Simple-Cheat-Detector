@@ -37,6 +37,8 @@ def print_logs(os_name: str) -> None:
         path = os.path.join(HOME_DIR, "AppData", "Roaming", ".minecraft", "logs")
     elif os_name == "linux":
         path = os.path.join("/", "root", ".minecraft", "logs")
+        if not os.path.exists(path):
+            path = os.path.join(HOME_DIR, ".minecraft", "logs")
 
     for log in os.listdir(path):
         if log == "latest.log":
@@ -49,6 +51,9 @@ def deep_search_in_mods(os_name: str) -> None:
         path = os.path.join(HOME_DIR, "AppData", "Roaming", ".minecraft", "mods")
     elif os_name == "linux":
         path = os.path.join("/", "/root", ".minecraft", "mods")
+        if not os.path.exists(path):
+            path = os.path.join(HOME_DIR, ".minecraft", "mods")
+
 
     SUSPICIOUS_KEYWORDS = [
         "hitbox", "hitboxes", "reach", "killaura", "aimbot", "xray", "wallhack", "autoclicker",
@@ -88,6 +93,9 @@ def deep_search_in_resourcepacks(os_name: str) -> None:
         path = os.path.join(HOME_DIR, "AppData", "Roaming", ".minecraft", "resourcepacks")
     elif os_name == "linux":
         path = os.path.join("/", "root", ".minecraft", "resourcepacks")
+        if not os.path.exists(path):
+            path = os.path.join(HOME_DIR, ".minecraft", "resourcepacks")
+
 
     if not os.path.exists(path):
         print(f"{GREY}There is no resourcepacks path{RESET}")
@@ -173,6 +181,7 @@ def appdata_check() -> None:
     check_path(os.path.join(roaming_path, ".minecraft", "versions"))
 
 def windows_logic() -> None:
+    # NO GREETING FOR WINDOWS USERS :)
     print(f'{GREY}USER IS RUNNING ON WINDOWS{RESET}')
     check_disk("C")
     check_disk("D")
