@@ -193,15 +193,24 @@ def linux_logic() -> None:
     
     # ROOT "/"
     print(f'{GREY}CHECK IN ROOT FOLDER...{RESET}')
-    check_path("/")
+    check_path(HOME_DIR)
     check_path("/root")
 
     # .minecraft
     check_path(os.path.join("/", "root", ".minecraft"))
+    check_path(os.path.join(HOME_DIR, ".minecraft"))
+
     check_path(os.path.join("/", "root", ".minecraft", "config"))
+    check_path(os.path.join(HOME_DIR, ".minecraft", "config"))
+
     check_path(os.path.join("/", "root", ".minecraft", "mods"))
+    check_path(os.path.join(HOME_DIR, ".minecraft", "mods"))
+
     check_path(os.path.join("/", "root", ".minecraft", "resourcepacks"))
+    check_path(os.path.join(HOME_DIR, ".minecraft", "resourcepacks"))
+
     check_path(os.path.join("/", "root", ".minecraft", "versions"))
+    check_path(os.path.join(HOME_DIR, ".minecraft", "versions"))
 
     print(f'{GREY}Deep search in mods (this is probably not cheats): {RESET}')
     deep_search_in_mods("linux")
