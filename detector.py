@@ -132,7 +132,7 @@ def deep_search_in_resourcepacks(os_name: str) -> None:
             except zipfile.BadZipFile:
                 print_error(f'File {file_name} is broken or not an .zip file')
         elif os.path.isdir(full_path):
-            for root, _, files in os.walk(full_path):
+            for _, _, files in os.walk(full_path):
                 for fname in files:
                     lower_name = fname.lower()
                     if any(keyword in lower_name for keyword in SUSPICIOUS_KEYWORDS):
@@ -164,7 +164,6 @@ def check_path(path: str) -> None:
         counter = -1
     except PermissionError:
         print(f"{GREY}No access to: {path}{RESET}")
-        counter = -1
 
     if counter == 0:
         print(f'{GREEN}PATH: {path} is clear{RESET}')
